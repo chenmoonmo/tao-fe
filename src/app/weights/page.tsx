@@ -1,4 +1,3 @@
-
 "use client";
 import {
   TableBody,
@@ -8,8 +7,31 @@ import {
   TableRoot,
   TableRow,
 } from "@radix-ui/themes";
+import { useQuery } from "@tanstack/react-query";
 
 function Page() {
+
+  const {} = useQuery({
+    queryKey: ["epoch weights"],
+    queryFn: async () => {
+      return {
+        data: {
+          epoch: 1,
+          weights: [
+            {
+              validator: "validator1",
+              stake: 100,
+              mineraddress1: "mineraddress1",
+              mineraddress2: "mineraddress2",
+              mineraddress3: "mineraddress3",
+            },
+          ],
+        },
+      };
+    },
+  });
+
+
   return (
     <main className="flex flex-col items-center w-full">
       <TableRoot className="max-w-[1200px] w-full">
