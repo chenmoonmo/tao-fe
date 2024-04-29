@@ -10,7 +10,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 function Page() {
-
   const {} = useQuery({
     queryKey: ["epoch weights"],
     queryFn: async () => {
@@ -30,7 +29,6 @@ function Page() {
       };
     },
   });
-
 
   return (
     <main className="flex flex-col items-center w-full">
