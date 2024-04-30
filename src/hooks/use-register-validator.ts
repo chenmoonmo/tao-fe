@@ -8,11 +8,7 @@ import {
   useReadContract,
 } from "wagmi";
 import { subnetABI as abi } from "@/abis";
-import {
-  rootContractAddress,
-  subnetContractAddress,
-  tokenAddress,
-} from "@/constants/contracts";
+import { subnetContractAddress, tokenAddress } from "@/constants/contracts";
 import { Address, erc20Abi, parseUnits } from "viem";
 
 export const useRegisterValidator = () => {
@@ -112,7 +108,14 @@ export const useRegisterValidator = () => {
     }
 
     setTimeout(hideDialog, 3000);
-  }, [address, allowance, hideDialog, publicClient, showDialog, writeContractAsync]);
+  }, [
+    address,
+    allowance,
+    hideDialog,
+    publicClient,
+    showDialog,
+    writeContractAsync,
+  ]);
 
   return { registerValidator };
 };

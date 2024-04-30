@@ -4,6 +4,7 @@ import { Address } from "viem";
 import { useTransactionDialog } from "@/components/transaction-provider";
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { subnetContractAddress } from "@/constants/contracts";
 
 export const useRegisterMinerInfo = () => {
   const queryClient = useQueryClient();
@@ -35,7 +36,7 @@ export const useRegisterMinerInfo = () => {
     try {
       const hash = await writeContractAsync({
         abi,
-        address: process.env.NEXT_PUBLIC_SUBNET_CONTRACT_ADDRESS as Address,
+        address: subnetContractAddress,
         functionName: "registerMinerInfo",
         args: [address!],
       });

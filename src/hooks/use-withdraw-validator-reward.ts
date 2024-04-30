@@ -33,7 +33,7 @@ export const useWithdrawValiditorReward = () => {
       try {
         const hash = await writeContractAsync({
           abi,
-          address: process.env.NEXT_PUBLIC_SUBNET_CONTRACT_ADDRESS as Address,
+          address: subnetContractAddress,
           functionName: "withdrawValiditorReward",
           args: [BigInt(epoch)],
         });

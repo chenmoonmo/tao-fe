@@ -1,11 +1,13 @@
 import { useTransactionDialog } from "@/components/transaction-provider";
+import { subnetContractAddress } from "@/constants/contracts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { usePublicClient, useAccount, useWriteContract } from "wagmi";
+import { Address } from "viem";
 import { subnetABI as abi } from "@/abis";
-import { subnetContractAddress } from "@/constants/contracts";
 
-export const useWithdrawMinerReward = () => {
+import { usePublicClient, useAccount, useWriteContract } from "wagmi";
+
+export const useSetWeight = () => {
   const queryClient = useQueryClient();
   const publicClient = usePublicClient();
 
@@ -15,7 +17,7 @@ export const useWithdrawMinerReward = () => {
     mutation: {
       onSettled: () => {
         queryClient.invalidateQueries({
-          queryKey: ["rewards", "miner", address],
+          queryKey: ["validator", address],
         });
       },
     },
@@ -23,8 +25,8 @@ export const useWithdrawMinerReward = () => {
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
-  const withdrawMinerReward = useCallback(
-    async (epoch: number) => {
+  const setWeight = useCallback(
+    async (miners: Address[], weights: bigint[]) => {
       showDialog({
         title: "Transaction Confirmation",
         content: "Please confirm the transaction in your wallet",
@@ -34,8 +36,8 @@ export const useWithdrawMinerReward = () => {
         const hash = await writeContractAsync({
           abi,
           address: subnetContractAddress,
-          functionName: "withdrawMinerReward",
-          args: [BigInt(epoch)],
+          functionName: "setWeight",
+          args: [miners, weights],
         });
 
         const transaction = await publicClient?.waitForTransactionReceipt({
@@ -71,5 +73,5 @@ export const useWithdrawMinerReward = () => {
     [hideDialog, publicClient, showDialog, writeContractAsync]
   );
 
-  return { withdrawMinerReward };
+  return { setWeight };
 };
