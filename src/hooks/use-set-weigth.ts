@@ -13,15 +13,7 @@ export const useSetWeight = () => {
 
   const { address } = useAccount();
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["validator", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -68,9 +60,21 @@ export const useSetWeight = () => {
         });
       }
 
-      setTimeout(hideDialog, 3000);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["validator", address],
+        });
+        hideDialog();
+      }, 3000);
     },
-    [hideDialog, publicClient, showDialog, writeContractAsync]
+    [
+      address,
+      hideDialog,
+      publicClient,
+      queryClient,
+      showDialog,
+      writeContractAsync,
+    ]
   );
 
   return { setWeight };

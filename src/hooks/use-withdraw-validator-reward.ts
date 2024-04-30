@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { usePublicClient, useAccount, useWriteContract } from "wagmi";
 import { subnetABI as abi } from "@/abis";
-import { Address } from "viem";
+import { subnetContractAddress } from "@/constants/contracts";
 
 export const useWithdrawValiditorReward = () => {
   const queryClient = useQueryClient();
@@ -11,15 +11,7 @@ export const useWithdrawValiditorReward = () => {
 
   const { address } = useAccount();
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["rewards", "miner", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -66,9 +58,21 @@ export const useWithdrawValiditorReward = () => {
         });
       }
 
-      setTimeout(hideDialog, 3000);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["rewards", "miner", address],
+        });
+        hideDialog();
+      }, 3000);
     },
-    [hideDialog, publicClient, showDialog, writeContractAsync]
+    [
+      address,
+      hideDialog,
+      publicClient,
+      queryClient,
+      showDialog,
+      writeContractAsync,
+    ]
   );
 
   return { withdrawValiditorReward };

@@ -1,6 +1,5 @@
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 import { subnetABI as abi } from "@/abis";
-import { Address } from "viem";
 import { useTransactionDialog } from "@/components/transaction-provider";
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,15 +11,7 @@ export const useRegisterMinerInfo = () => {
 
   const { address } = useAccount();
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["miner", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -69,8 +60,14 @@ export const useRegisterMinerInfo = () => {
       });
     }
 
-    setTimeout(hideDialog, 3000);
-  }, [address, hideDialog, publicClient, showDialog, writeContractAsync]);
+    setTimeout(() => {
+      queryClient.invalidateQueries({
+        queryKey: ["miner", address],
+      });
+      hideDialog();
+    }, 3000);
+
+  }, [address, hideDialog, publicClient, queryClient, showDialog, writeContractAsync]);
 
   return { registerMinerInfo };
 };

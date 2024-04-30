@@ -11,15 +11,7 @@ export const useWithdrawMinerReward = () => {
 
   const { address } = useAccount();
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["rewards", "miner", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -66,9 +58,21 @@ export const useWithdrawMinerReward = () => {
         });
       }
 
-      setTimeout(hideDialog, 3000);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["rewards", "miner", address],
+        });
+        hideDialog();
+      }, 3000);
     },
-    [hideDialog, publicClient, showDialog, writeContractAsync]
+    [
+      address,
+      hideDialog,
+      publicClient,
+      queryClient,
+      showDialog,
+      writeContractAsync,
+    ]
   );
 
   return { withdrawMinerReward };

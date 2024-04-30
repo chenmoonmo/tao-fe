@@ -19,7 +19,7 @@ import {
   Card,
 } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Address, formatUnits } from "viem";
 import { useAccount } from "wagmi";
 
@@ -242,7 +242,7 @@ function Page() {
 
             {weights?.map((item, i) => {
               return (
-                <>
+                <Fragment key={item.minerAddress}>
                   <label className="col-span-2" htmlFor="weight-1">
                     <AddressComponent>{item.minerAddress}</AddressComponent>
                   </label>
@@ -256,16 +256,18 @@ function Page() {
                       setWeights(newWeights);
                     }}
                   />
-                </>
+                </Fragment>
               );
             })}
-            <Button
-              className="col-start-3"
-              disabled={!enableSetWeights}
-              onClick={handleSetWeight}
-            >
-              Submit
-            </Button>
+            {(weights?.length ?? 0) > 0 && (
+              <Button
+                className="col-start-3"
+                disabled={!enableSetWeights}
+                onClick={handleSetWeight}
+              >
+                Submit
+              </Button>
+            )}
           </div>
         </Card>
         <TableRoot className="mt-5">

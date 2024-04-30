@@ -59,7 +59,7 @@ function Page() {
           ...item,
           Reward: formatUnits(BigInt(item.Reward), 18),
         };
-      });
+      }) ?? [];
     },
   });
 

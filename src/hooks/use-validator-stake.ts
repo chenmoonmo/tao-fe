@@ -13,15 +13,7 @@ export const useValidatorStake = () => {
 
   const { address } = useAccount();
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["validator", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -36,12 +28,14 @@ export const useValidatorStake = () => {
       });
 
       try {
-
         const aproveHash = await writeContractAsync({
           abi: erc20Abi,
           address: tokenAddress,
           functionName: "approve",
-          args: [rootContractAddress, parseUnits("100000000000000000000000", 18)],
+          args: [
+            rootContractAddress,
+            parseUnits("100000000000000000000000", 18),
+          ],
         });
 
         const aproveTransaction = await publicClient?.waitForTransactionReceipt(
@@ -89,10 +83,22 @@ export const useValidatorStake = () => {
         });
       }
 
-      setTimeout(hideDialog, 3000);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["validator", address],
+        });
+        hideDialog();
+      }, 3000);
     },
 
-    [address, hideDialog, publicClient, showDialog, writeContractAsync]
+    [
+      address,
+      hideDialog,
+      publicClient,
+      queryClient,
+      showDialog,
+      writeContractAsync,
+    ]
   );
 
   return { stake };

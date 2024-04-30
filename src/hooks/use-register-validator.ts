@@ -24,15 +24,7 @@ export const useRegisterValidator = () => {
     args: [address!, subnetContractAddress],
   });
 
-  const { writeContractAsync } = useWriteContract({
-    mutation: {
-      onSettled: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["validator", address],
-        });
-      },
-    },
-  });
+  const { writeContractAsync } = useWriteContract();
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
@@ -107,12 +99,19 @@ export const useRegisterValidator = () => {
       });
     }
 
-    setTimeout(hideDialog, 3000);
+    setTimeout(() => {
+      queryClient.invalidateQueries({
+        queryKey: ["validator", address],
+      });
+      hideDialog();
+    }, 3000);
+    
   }, [
     address,
     allowance,
     hideDialog,
     publicClient,
+    queryClient,
     showDialog,
     writeContractAsync,
   ]);
