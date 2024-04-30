@@ -10,6 +10,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 function Page() {
+  
   const {} = useQuery({
     queryKey: ["epoch weights"],
     queryFn: async () => {
