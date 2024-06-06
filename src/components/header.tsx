@@ -8,14 +8,14 @@ const Navs = [
     name: "Miner",
     href: "/",
   },
-  {
-    name: "Validator",
-    href: "/validator",
-  },
-  {
-    name: "Weights",
-    href: "/weights",
-  },
+  // {
+  //   name: "Validator",
+  //   href: "/validator",
+  // },
+  // {
+  //   name: "Weights",
+  //   href: "/weights",
+  // },
 ];
 
 export const Header = () => {

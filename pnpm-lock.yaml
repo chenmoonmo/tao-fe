@@ -17,6 +17,9 @@ dependencies:
   connectkit:
     specifier: ^1.7.3
     version: 1.7.3(@babel/core@7.24.3)(@tanstack/react-query@5.28.9)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(viem@2.9.6)(wagmi@2.5.17)
+  dayjs:
+    specifier: ^1.11.11
+    version: 1.11.11
   framer-motion:
     specifier: ^10.16.4
     version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
@@ -5858,8 +5861,8 @@ packages:
       '@babel/runtime': 7.24.1
     dev: false
 
-  /dayjs@1.11.10:
-    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+  /dayjs@1.11.11:
+    resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
     dev: false
 
   /debounce@1.2.1:
@@ -8025,7 +8028,7 @@ packages:
     hasBin: true
     dependencies:
       ansi-fragments: 0.2.1
-      dayjs: 1.11.10
+      dayjs: 1.11.11
       yargs: 15.4.1
     dev: false
 
@@ -9649,6 +9652,7 @@ packages:
 
   /rimraf@2.6.3:
     resolution: {integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3

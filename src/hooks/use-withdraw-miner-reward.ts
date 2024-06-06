@@ -23,6 +23,7 @@ export const useWithdrawMinerReward = () => {
         status: "loading",
       });
       try {
+        
         const hash = await writeContractAsync({
           abi,
           address: subnetContractAddress,
