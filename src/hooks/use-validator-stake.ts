@@ -38,6 +38,13 @@ export const useValidatorStake = () => {
           ],
         });
 
+
+        showDialog({
+          title: "Transaction Confirmation",
+          content: "Transaction Pending",
+          status: "loading",
+        });
+
         const aproveTransaction = await publicClient?.waitForTransactionReceipt(
           {
             hash: aproveHash,
@@ -69,11 +76,6 @@ export const useValidatorStake = () => {
           status: "success",
         });
 
-        showDialog({
-          title: "Transaction Confirmation",
-          content: "Transaction Pending",
-          status: "loading",
-        });
       } catch (e) {
         console.error(e);
         showDialog({

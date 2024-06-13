@@ -15,6 +15,7 @@ export const useWithdrawMinerReward = () => {
 
   const { showDialog, hideDialog } = useTransactionDialog();
 
+
   const withdrawMinerReward = useCallback(
     async (epoch: number) => {
       showDialog({
@@ -22,8 +23,8 @@ export const useWithdrawMinerReward = () => {
         content: "Please confirm the transaction in your wallet",
         status: "loading",
       });
+
       try {
-        
         const hash = await writeContractAsync({
           abi,
           address: subnetContractAddress,
@@ -31,9 +32,19 @@ export const useWithdrawMinerReward = () => {
           args: [BigInt(epoch)],
         });
 
+        console.log(hash);
+
+        showDialog({
+          title: "Transaction Confirmation",
+          content: "Transaction Pending",
+          status: "loading",
+        });
+
         const transaction = await publicClient?.waitForTransactionReceipt({
           hash,
         });
+
+        console.log(transaction);
 
         if (transaction?.status === "reverted") {
           throw new Error("Transaction Reverted");
@@ -44,19 +55,13 @@ export const useWithdrawMinerReward = () => {
           content: "Transaction Confirmed",
           status: "success",
         });
-
-        showDialog({
-          title: "Transaction Confirmation",
-          content: "Transaction Pending",
-          status: "loading",
-        });
       } catch (e) {
-        console.error(e);
         showDialog({
           title: "Transaction Error",
           content: "Please try again",
           status: "error",
         });
+        console.log(e);
       }
 
       setTimeout(() => {

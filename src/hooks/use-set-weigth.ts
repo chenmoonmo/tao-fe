@@ -32,6 +32,12 @@ export const useSetWeight = () => {
           args: [miners, weights],
         });
 
+        showDialog({
+          title: "Transaction Confirmation",
+          content: "Transaction Pending",
+          status: "loading",
+        });
+
         const transaction = await publicClient?.waitForTransactionReceipt({
           hash,
         });
@@ -44,12 +50,6 @@ export const useSetWeight = () => {
           title: "Transaction Confirmation",
           content: "Transaction Confirmed",
           status: "success",
-        });
-
-        showDialog({
-          title: "Transaction Confirmation",
-          content: "Transaction Pending",
-          status: "loading",
         });
       } catch (e) {
         console.error(e);

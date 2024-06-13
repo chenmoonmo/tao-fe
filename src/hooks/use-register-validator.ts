@@ -70,6 +70,11 @@ export const useRegisterValidator = () => {
         functionName: "registerLegalStaker",
         args: [address!, data.ReplaceStaker],
       });
+      showDialog({
+        title: "Transaction Confirmation",
+        content: "Transaction Pending",
+        status: "loading",
+      });
 
       const transaction = await publicClient?.waitForTransactionReceipt({
         hash,
@@ -85,11 +90,6 @@ export const useRegisterValidator = () => {
         status: "success",
       });
 
-      showDialog({
-        title: "Transaction Confirmation",
-        content: "Transaction Pending",
-        status: "loading",
-      });
     } catch (e) {
       console.error(e);
       showDialog({

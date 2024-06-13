@@ -21,6 +21,7 @@ import { useMemo } from "react";
 import { Address, formatUnits } from "viem";
 import { useAccount } from "wagmi";
 import dayjs from "dayjs";
+import { formatAmount } from "@/utils/format";
 
 function Page() {
   const { address } = useAccount();
@@ -44,9 +45,9 @@ function Page() {
     queryKey: ["rewards", "miner", address],
     queryFn: async () => {
       const data = (await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/minerReward?miner=${address}?subnet=${subnetContractAddress}`
+        `${process.env.NEXT_PUBLIC_API_URL}/minerReward?miner=${address}&subnet=${subnetContractAddress}`
       ).then((res) => res.json())) as {
-        MinerRewards:
+        RewardInfo:
           | {
               Miner: Address;
               Subnet: Address;
@@ -57,12 +58,12 @@ function Page() {
       };
 
       return (
-        data?.MinerRewards?.map((item) => {
+        data?.RewardInfo?.map((item) => {
           return {
             ...item,
             Reward: formatUnits(BigInt(item.Reward), 18),
           };
-        }) ?? []
+        }).sort((i, j) => i.Epoch - j.Epoch) ?? []
       );
     },
   });
@@ -157,7 +158,7 @@ function Page() {
             {rewards?.map((reward) => (
               <TableRow key={reward.Epoch}>
                 <TableCell>{reward.Epoch}</TableCell>
-                <TableCell>{reward.Reward}</TableCell>
+                <TableCell>{formatAmount(reward.Reward)}</TableCell>
                 <TableCell>
                   <Button onClick={() => withdrawMinerReward(reward.Epoch)}>
                     Claim

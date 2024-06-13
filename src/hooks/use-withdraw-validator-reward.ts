@@ -29,6 +29,12 @@ export const useWithdrawValiditorReward = () => {
           functionName: "withdrawValiditorReward",
           args: [BigInt(epoch)],
         });
+        
+        showDialog({
+          title: "Transaction Confirmation",
+          content: "Transaction Pending",
+          status: "loading",
+        });
 
         const transaction = await publicClient?.waitForTransactionReceipt({
           hash,
@@ -42,12 +48,6 @@ export const useWithdrawValiditorReward = () => {
           title: "Transaction Confirmation",
           content: "Transaction Confirmed",
           status: "success",
-        });
-
-        showDialog({
-          title: "Transaction Confirmation",
-          content: "Transaction Pending",
-          status: "loading",
         });
       } catch (e) {
         console.error(e);
