@@ -22,6 +22,7 @@ import { Address, formatUnits } from "viem";
 import { useAccount } from "wagmi";
 import dayjs from "dayjs";
 import { formatAmount } from "@/utils/format";
+import { Toaster } from "react-hot-toast";
 
 function Page() {
   const { address } = useAccount();
@@ -106,6 +107,14 @@ function Page() {
 
   return (
     <main className="flex flex-col items-center pt-10">
+      <Toaster
+        toastOptions={{
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+        }}
+      />
       <Heading>Miner</Heading>
       <div>
         <Card size="4" mt="5">

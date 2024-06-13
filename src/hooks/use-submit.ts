@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { toBytes } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
+import toast from "react-hot-toast";
 
 export const useSubmit = () => {
   const [value, setValue] = useState("");
@@ -11,12 +12,24 @@ export const useSubmit = () => {
   const { signMessage } = useSignMessage({
     mutation: {
       onSuccess: async (sign) => {
-        fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/addWork?worker=${address}&value=${value}&work_time=${timestamp.current}&i_type=1&worker_sign=${sign}`
-        );
+        try {
+          const data = (await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/addWork?worker=${address}&value=${value}&work_time=${timestamp.current}&i_type=1&worker_sign=${sign}`
+          ).then((res) => res.json())) as { WorkId: string };
 
+          if (data.WorkId) {
+            toast.success("Submit Success");
+          } else {
+            toast.error("Submit Failed");
+          }
+        } catch {
+          toast.error("Submit Failed");
+        }
         setValue("");
       },
+      // onError: () => {
+      //   toast.error("Submit Failed");
+      // },
     },
   });
 
@@ -36,7 +49,6 @@ export const useSubmit = () => {
         raw: textMessages,
       },
     });
-    
   };
 
   return {
